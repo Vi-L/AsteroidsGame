@@ -17,16 +17,16 @@ public void draw()
   player.move();
   player.show();
   
-  if (keyPressed) keyPressed(); // makes the turning more smooth
+  if (keyPressed) keyPressed(); // makes the turning more smooth for now, TODO: use booleans to do smoother controls (check github page for info)
 }
 public void keyPressed() {
-  if (key == 'w') {
+  if (key == 'w' || key == 'W') {
     player.accelerate(0.1);
   }
-  if (key == 'a') {
+  if (key == 'a' || key == 'A') {
     player.turn(-4);
   }
-  if (key == 'd') {
+  if (key == 'd' || key == 'D') {
     player.turn(4);
   }
 }
