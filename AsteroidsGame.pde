@@ -1,5 +1,8 @@
 Spaceship player;
 Star[] stars = new Star[250];
+
+boolean wPressed, aPressed, dPressed, shiftPressed = false;
+
 public void setup() 
 {
   size(750, 750);
@@ -17,16 +20,42 @@ public void draw()
   player.move();
   player.show();
   
-  if (keyPressed) keyPressed(); // makes the turning more smooth for now, TODO: use booleans to do smoother controls (check github page for info)
+  if (wPressed) player.accelerate(0.05);
+  if (aPressed) player.turn(-5);
+  if (dPressed) player.turn(5);
+  if (shiftPressed) {
+    player.hyperspace();
+    for (int i = 0; i < stars.length; i++) {
+      stars[i] = new Star();
+    }
+  }
 }
 public void keyPressed() {
   if (key == 'w' || key == 'W') {
-    player.accelerate(0.1);
+    wPressed = true;
   }
   if (key == 'a' || key == 'A') {
-    player.turn(-4);
+    aPressed = true;
   }
   if (key == 'd' || key == 'D') {
-    player.turn(4);
+    dPressed = true;
+  }
+  if (keyCode == SHIFT) {
+    shiftPressed = true;
+  }
+}
+
+public void keyReleased() {
+  if (key == 'w' || key == 'W') {
+    wPressed = false;
+  }
+  if (key == 'a' || key == 'A') {
+    aPressed = false;
+  }
+  if (key == 'd' || key == 'D') {
+    dPressed = false;
+  }
+  if (keyCode == SHIFT) {
+    shiftPressed = false;
   }
 }
