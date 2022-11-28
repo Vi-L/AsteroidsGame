@@ -1,5 +1,6 @@
 Spaceship player;
 Star[] stars = new Star[250];
+Asteroid test = new Asteroid();
 
 boolean wPressed, aPressed, dPressed, shiftPressed = false;
 
@@ -29,6 +30,8 @@ public void draw()
       stars[i] = new Star();
     }
   }
+  test.move();
+  test.show();
 }
 public void keyPressed() {
   if (key == 'w' || key == 'W') {
