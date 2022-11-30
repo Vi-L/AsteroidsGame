@@ -1,15 +1,18 @@
-Spaceship player;
+Spaceship player = new Spaceship();
 Star[] stars = new Star[250];
-// Asteroid test = new Asteroid();
+ArrayList<Asteroid> asteroidList = new ArrayList<Asteroid>();
 
 boolean wPressed, aPressed, dPressed, shiftPressed = false;
+int numAsteroids = 15;
 
 public void setup() 
 {
   size(750, 750);
-  player = new Spaceship();
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
+  }
+  for (int i = 0; i < numAsteroids; i++) {
+    asteroidList.add(new Asteroid());
   }
 }
 public void draw() 
@@ -18,6 +21,7 @@ public void draw()
   for (int i = 0; i < stars.length; i++) {
     stars[i].show();
   }
+  
   player.move();
   player.show();
   
@@ -29,9 +33,21 @@ public void draw()
     for (int i = 0; i < stars.length; i++) {
       stars[i] = new Star();
     }
+    asteroidList = new ArrayList<Asteroid>();
   }
-  // test.move();
-  // test.show();
+  
+  for (int i = 0; i < asteroidList.size(); i++) {
+    Asteroid asteroidi = asteroidList.get(i);
+    asteroidi.move();
+    asteroidi.show();
+    
+    if ( dist((float)player.getCenterX(), (float)player.getCenterY(),
+              (float)asteroidi.getCenterX(), (float)asteroidi.getCenterY()) < 8 * asteroidi.getSize() ) {
+      asteroidList.remove(i);
+      numAsteroids--;
+      i--; // avoid ArrayList trap?
+    }
+  }
 }
 public void keyPressed() {
   if (key == 'w' || key == 'W') {
@@ -60,5 +76,8 @@ public void keyReleased() {
   }
   if (keyCode == SHIFT) {
     shiftPressed = false;
+    for (int i = 0; i < numAsteroids; i++) {
+      asteroidList.add(new Asteroid());
+    }
   }
 }
