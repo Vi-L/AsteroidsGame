@@ -34,6 +34,9 @@ public void draw()
     bezier(30+i*30, 30, 10+i*30, 5, 20+i*30, 35, 30+i*30, 50); // draw a heart
     bezier(30+i*30, 30, 50+i*30, 5, 40+i*30, 35, 30+i*30, 50);
   }
+  stroke(0, 255, 255);
+  fill(0, 255, 255);
+  text("Score: " + playerScore, 175, 16);
   
   for (int i = 0; i < stars.length; i++) {
     stars[i].show();
