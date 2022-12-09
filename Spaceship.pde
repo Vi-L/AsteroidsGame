@@ -14,10 +14,8 @@ class Spaceship extends Floater
     
     public void move() {
       super.move();
-      if (myXspeed > 20) myXspeed = 20; //limit max speed
-      if (myXspeed < -20) myXSpeed = -20;
-      if (myYspeed > 20) myYspeed = 20;
-      if (myYspeed < -20) myYspeed = -20;
+      if (myXspeed > 25) myXspeed = 20; //limit max speed
+      if (myYspeed > 25) myYspeed = 20;
     }
     
     public void hyperspace() {
@@ -33,5 +31,14 @@ class Spaceship extends Floater
     }
     public double getCenterY() {
       return myCenterY;
+    }
+    public double getXspeed() {
+      return myXspeed;
+    }
+    public double getYspeed() {
+      return myYspeed;
+    }
+    public double getPointDirection() {
+      return myPointDirection;
     }
 }
