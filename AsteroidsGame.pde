@@ -26,17 +26,21 @@ public void setup()
 public void draw() 
 {
   background(0);
-  for (int i = 1; i < playerLives+1; i++) {
-    stroke(255, 0, 0);
-    fill(255, 0, 0);
-    textSize(14);
-    text("Lives:", 10, 20);
+  stroke(255, 0, 0);
+  fill(255, 0, 0);
+  textSize(14);
+  text("Lives:", 10, 20);
+  for (int i = 1; i < playerLives+1; i++) { 
     bezier(30+i*30, 30, 10+i*30, 5, 20+i*30, 35, 30+i*30, 50); // draw a heart
     bezier(30+i*30, 30, 50+i*30, 5, 40+i*30, 35, 30+i*30, 50);
   }
   stroke(0, 255, 255);
   fill(0, 255, 255);
   text("Score: " + playerScore, 175, 16);
+  
+  stroke(255, 255, 0);
+  fill(255, 255, 0);
+  text("Hyperspaces remaining: " + playerHyperspaces, 550, 16);
   
   for (int i = 0; i < stars.length; i++) {
     stars[i].show();
@@ -46,6 +50,8 @@ public void draw()
   player.show();
   
   if (playerLives <= 0) {
+    player.setXspeed(0);
+    player.setYspeed(0);
     stroke(0, 255, 0);
     fill(0, 255, 0);
     textSize(28);
@@ -59,13 +65,13 @@ public void draw()
   if (wPressed) player.accelerate(0.05);
   if (aPressed) player.turn(-5);
   if (dPressed) player.turn(5);
-  if (spacePressed && spacebarTimer >= spacebarDebounce) { 
+  if (spacePressed && spacebarTimer >= spacebarDebounce) { //shooting bullets
     bulletList.add(new Bullet(player));
     spacebarTimer = 0;
   } else {
     spacebarTimer++;
   }
-  if (shiftPressed) {
+  if (shiftPressed && playerHyperspaces > 0) { // entering hyperspace
     player.hyperspace();
     for (int i = 0; i < stars.length; i++) {
       stars[i] = new Star();
@@ -85,11 +91,15 @@ public void draw()
       numAsteroids--;
       playerLives--;
       i--; // avoid ArrayList skipping trap
+      
+      if (Math.random() > 0.3) asteroidList.add(new Asteroid()); //high chance of replacing if you collide with it
     }
   }
   
   /* handle bullet collision with asteroids*/
   for (int i = 0; i < bulletList.size(); i++) {
+    if (i < 0) i++;
+    
     Bullet bulleti = bulletList.get(i);
     bulleti.move();
     bulleti.show();
@@ -108,10 +118,16 @@ public void draw()
         numAsteroids--;
         j--; // ArrayList trap
         
-        bulletList.remove(i);
+        if (i >= 0 && i < bulletList.size()) bulletList.remove(i);
         i--; // ArrayList trap
+        
+        if (Math.random() > 0.7) asteroidList.add(new Asteroid()); // lower chance of replacing if you shoot it
       }
     }
+  }
+  
+  if (asteroidList.size() < 5 && Math.random() >= 0.5) {
+    asteroidList.add(new Asteroid());
   }
 }
 public void keyPressed() {
@@ -144,8 +160,11 @@ public void keyReleased() {
   }
   if (keyCode == SHIFT) {
     shiftPressed = false;
-    for (int i = 0; i < numAsteroids; i++) { // make new asteroids after hyperspace "animation" is done
-      asteroidList.add(new Asteroid());
+    if (playerHyperspaces > 0) {
+      playerHyperspaces--;
+      for (int i = 0; i < numAsteroids; i++) { // make new asteroids after hyperspace "animation" is done
+        asteroidList.add(new Asteroid());
+      }
     }
   }
   if (key == ' ') {
