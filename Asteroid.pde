@@ -31,4 +31,7 @@ class Asteroid extends Floater {
   public double getSize() {
     return mySize;
   }
+  public double getCollisionThreshold() {
+    return 8 * getSize();
+  }
 }
